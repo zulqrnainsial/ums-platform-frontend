@@ -393,22 +393,16 @@ const loadContext = async () => {
   try {
     await loadPlacementOptions()
     const response: any = await api.getStudentSectionBatchAllocationContext(cleanFilters())
-    const data = response?.data?.data || response?.data || response || {}
+    const payload = response?.data?.data || response?.data || response || {}
 
-const paginator = unwrapPaginator(data.enrollments)
+const paginator = payload.enrollments || {}
 
 rows.value = paginator.data || []
 pagination.total = paginator.total || rows.value.length
-pagination.current = paginator.current_page || pagination.current    
+pagination.current = paginator.current_page || pagination.current
 
-    // const paginator = data.enrollments || {}
-
-    // rows.value = paginator.data || []
-    // pagination.total = paginator.total || rows.value.length
-    // pagination.current = paginator.current_page || pagination.current
-
-    batches.value = data.batches || []
-    sections.value = data.sections || []
+batches.value = payload.batches || []
+sections.value = payload.sections || []
 
     selectedEnrollmentIds.value = []
   } catch (error: any) {

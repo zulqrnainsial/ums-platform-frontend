@@ -151,8 +151,21 @@ const rowSelection = computed(() => ({
 const unwrap = (response: any) => response?.data?.data || response?.data || response || []
 
 const loadContext = async () => {
-  const response: any = await api.getStudentCourseRegistrationContext(studentId)
-  context.value = unwrap(response)
+  loading.value = true
+
+  try {
+    const response: any = await api.getStudentCourseRegistrationContext(studentId)
+    const payload = response?.data?.data || response?.data || response || {}
+
+    context.value = payload
+    registeredCourses.value = Array.isArray(payload.registered_courses)
+      ? payload.registered_courses
+      : []
+  } catch (error: any) {
+    message.error(error?.data?.message || 'Unable to load course registration context.')
+  } finally {
+    loading.value = false
+  }
 }
 
 const loadAvailableCourses = async () => {
@@ -167,13 +180,13 @@ const loadAvailableCourses = async () => {
     term_no: termNo.value || undefined,
   })
 
-  availableCourses.value = unwrap(response)
+  availableCourses.value = unwrapArray(response, 'courses')
   selectedCourseIds.value = []
 }
 
 const loadRegisteredCourses = async () => {
   const response: any = await api.getStudentRegisteredCourses(studentId)
-  registeredCourses.value = unwrap(response)
+  registeredCourses.value = unwrapArray(response, 'registered_courses')
 }
 
 const loadAll = async () => {
@@ -220,7 +233,31 @@ const registerSelected = async () => {
     loading.value = false
   }
 }
+const unwrapArray = (response: any, key?: string) => {
+  const payload = response?.data?.data || response?.data || response || {}
 
+  if (key && Array.isArray(payload?.[key])) {
+    return payload[key]
+  }
+
+  if (Array.isArray(payload)) {
+    return payload
+  }
+
+  if (Array.isArray(payload?.data)) {
+    return payload.data
+  }
+
+  if (Array.isArray(payload?.courses)) {
+    return payload.courses
+  }
+
+  if (Array.isArray(payload?.registered_courses)) {
+    return payload.registered_courses
+  }
+
+  return []
+}
 const removeCourse = async (record: any) => {
   loading.value = true
 
