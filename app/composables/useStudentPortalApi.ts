@@ -99,7 +99,31 @@ const deleteStudentResearchPublication = (publicationId: number) => {
     method: 'DELETE',
   })
 }
+const getStudentCourseRegistrationSettings = () => {
+  return apiFetch('/student-portal/course-registration/settings', {
+    method: 'GET',
+  })
+}
 
+const getStudentSelfRegistrationAvailableCourses = (params: any = {}) => {
+  return apiFetch('/student-portal/course-registration/available-courses', {
+    method: 'GET',
+    params,
+  })
+}
+
+const submitStudentSelfCourseRegistration = (payload: any) => {
+  return apiFetch('/student-portal/course-registration/submit', {
+    method: 'POST',
+    body: payload,
+  })
+}
+const getStudentAttendance = (params: any = {}) => {
+  return apiFetch('/student-portal/attendance', {
+    method: 'GET',
+    params,
+  })
+}
   return {
     getStudentPortalDashboard,
     getStudentPortalProfile,
@@ -117,5 +141,9 @@ const deleteStudentResearchPublication = (publicationId: number) => {
     getStudentResearchPublications,
     submitStudentResearchPublication,
     deleteStudentResearchPublication,
+    getStudentCourseRegistrationSettings,
+    getStudentSelfRegistrationAvailableCourses,
+    submitStudentSelfCourseRegistration,
+    getStudentAttendance,
   }
 }

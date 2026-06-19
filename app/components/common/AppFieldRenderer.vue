@@ -65,6 +65,7 @@
         v-for="option in options"
         :key="option.value"
         :value="option.value"
+        :label="option.label"
       >
         {{ option.label }}
       </a-select-option>
@@ -246,13 +247,23 @@ const getStaticOptions = () => {
   return storage.normalizeOptions(items, storageMode.value)
 }
 
+
+
 const normalizeResponse = (response: any) => {
+  if (Array.isArray(response?.data?.data)) {
+    return response.data.data
+  }
+
   if (Array.isArray(response?.data)) {
     return response.data
   }
 
-  if (Array.isArray(response?.data?.data)) {
-    return response.data.data
+  if (Array.isArray(response?.items)) {
+    return response.items
+  }
+
+  if (Array.isArray(response?.options)) {
+    return response.options
   }
 
   if (Array.isArray(response)) {
@@ -363,9 +374,18 @@ const loadOptions = async () => {
 }
 
 const filterOption = (input: string, option: any) => {
-  return String(option?.children || '')
+  const searchText = [
+    option?.label,
+    option?.value,
+    option?.children,
+    option?.key,
+    option?.title,
+  ]
+    .filter((value) => value !== undefined && value !== null)
+    .join(' ')
     .toLowerCase()
-    .includes(input.toLowerCase())
+
+  return searchText.includes(String(input || '').toLowerCase())
 }
 
 const handleDropdownOpen = async (open: boolean) => {

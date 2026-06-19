@@ -220,6 +220,24 @@
                 <a-input v-model:value="form.logo" placeholder="/uploads/logos/demo.png" />
               </a-form-item>
             </a-col>
+            <a-col v-if="!modal.isEdit" :span="24">
+  <a-form-item label="Enabled Modules">
+    <a-checkbox-group v-model:value="form.module_ids" style="width: 100%">
+      <a-row :gutter="[8, 8]">
+        <a-col
+          v-for="module in allModuleOptions"
+          :key="module.value"
+          :span="8"
+        >
+          <a-checkbox :value="module.value" :disabled="module.is_core">
+            {{ module.label }}
+            <a-tag v-if="module.is_core" color="blue">Core</a-tag>
+          </a-checkbox>
+        </a-col>
+      </a-row>
+    </a-checkbox-group>
+  </a-form-item>
+</a-col>
           </a-row>
         </a-form>
       </a-modal>
@@ -487,12 +505,25 @@ const resetForm = () => {
   form.subscription_status = 'trial'
   form.subscription_start_date = ''
   form.subscription_end_date = ''
+  form.admin_name = ''
+  form.admin_email = ''
+  form.admin_password = ''
+  form.module_ids = []
 }
 
-const openCreateModal = () => {
+const openCreateModal = async () => {
   resetForm()
   modal.isEdit = false
   modal.editId = null
+
+  if (allModuleOptions.value.length === 0) {
+    await fetchAllModuleOptions()
+  }
+
+  form.module_ids = allModuleOptions.value
+    .filter((module: any) => module.is_core)
+    .map((module: any) => module.value)
+
   modal.visible = true
 }
 
@@ -526,9 +557,14 @@ const saveTenant = async () => {
 
   try {
     if (modal.isEdit && modal.editId) {
+      const payload = { ...form }
+      delete (payload as any).admin_name
+      delete (payload as any).admin_email
+      delete (payload as any).admin_password
+      delete (payload as any).module_ids
       await apiFetch(`/admin/tenants/${modal.editId}`, {
         method: 'PUT',
-        body: form,
+        body: payload,
       })
 
       message.success('Tenant updated successfully.')
@@ -613,6 +649,7 @@ const getStatusColor = (status: string) => {
 
 onMounted(() => {
   fetchTenants()
+  fetchAllModuleOptions()
 })
 </script>
 

@@ -14,7 +14,9 @@
 <NuxtLink to="/student-portal/fee-status">
   <a-button>Fee Status</a-button>
 </NuxtLink>
-
+<NuxtLink to="/student-portal/course-registration">
+  <a-button>Course Registration</a-button>
+</NuxtLink>
 <NuxtLink to="/student-portal/research-publications">
   <a-button>Research / Publications</a-button>
 </NuxtLink>

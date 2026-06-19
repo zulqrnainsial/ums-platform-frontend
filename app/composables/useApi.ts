@@ -269,7 +269,99 @@ const getStudentAcademicPlacementOptions = (params: any = {}) => {
     params,
   })
 }
+const getBulkCourseRegistrationContext = (params: any = {}) => {
+  return apiFetch('/student-management/bulk-course-registration/context', {
+    method: 'GET',
+    params,
+  })
+}
 
+const previewBulkCourseRegistration = (params: any = {}) => {
+  return apiFetch('/student-management/bulk-course-registration/preview', {
+    method: 'GET',
+    params,
+  })
+}
+
+const registerBulkCourses = (payload: any) => {
+  return apiFetch('/student-management/bulk-course-registration/register', {
+    method: 'POST',
+    body: payload,
+  })
+}
+
+const getCourseRegistrationSettings = (params: any = {}) => {
+  return apiFetch('/student-management/course-registration-settings', {
+    method: 'GET',
+    params,
+  })
+}
+
+const saveCourseRegistrationSettings = (payload: any) => {
+  return apiFetch('/student-management/course-registration-settings', {
+    method: 'POST',
+    body: payload,
+  })
+}
+const getAttendanceMarkingContext = (params: any = {}) => {
+  return apiFetch('/attendance/marking/context', {
+    method: 'GET',
+    params,
+  })
+}
+
+const getAttendanceMarkingStudents = (params: any = {}) => {
+  return apiFetch('/attendance/marking/students', {
+    method: 'GET',
+    params,
+  })
+}
+
+const saveAttendanceMarking = (payload: any) => {
+  return apiFetch('/attendance/marking/save', {
+    method: 'POST',
+    body: payload,
+  })
+}
+
+const getAttendanceSessions = (params: any = {}) => {
+  return apiFetch('/attendance/sessions', {
+    method: 'GET',
+    params,
+  })
+}
+
+const getAttendanceSession = (sessionId: number | string) => {
+  return apiFetch(`/attendance/sessions/${sessionId}`, {
+    method: 'GET',
+  })
+}
+
+const lockAttendanceSession = (sessionId: number | string) => {
+  return apiFetch(`/attendance/sessions/${sessionId}/lock`, {
+    method: 'POST',
+  })
+}
+const getAttendanceReportSummary = (params: any = {}) => {
+  return apiFetch('/attendance/reports/summary', {
+    method: 'GET',
+    params,
+  })
+}
+
+const getAttendanceStudentCoursePercentages = (params: any = {}) => {
+  return apiFetch('/attendance/reports/student-course-percentages', {
+    method: 'GET',
+    params,
+  })
+}
+
+const getAttendanceDefaulters = (params: any = {}) => {
+  return apiFetch('/attendance/reports/defaulters', {
+    method: 'GET',
+    params,
+  })
+}
   return {
     apiFetch,
     getToken,
@@ -309,5 +401,19 @@ const getStudentAcademicPlacementOptions = (params: any = {}) => {
     getStudentRequest,
     decideStudentRequest,
     getStudentAcademicPlacementOptions,
+    getBulkCourseRegistrationContext,
+    previewBulkCourseRegistration,
+    registerBulkCourses,
+    getCourseRegistrationSettings,
+    saveCourseRegistrationSettings,
+    getAttendanceMarkingContext,
+    getAttendanceMarkingStudents,
+    saveAttendanceMarking,
+    getAttendanceSessions,
+    getAttendanceSession,
+    lockAttendanceSession,
+    getAttendanceReportSummary,
+    getAttendanceStudentCoursePercentages,
+    getAttendanceDefaulters,
   }
 }

@@ -108,39 +108,26 @@
             <a-col :span="12">
               <a-form-item label="Parent Menu">
                 <a-select
-                  v-model:value="form.parent_id"
-                  allow-clear
-                  show-search
-                  placeholder="Select parent"
-                >
-                  <a-select-option
-                    v-for="menu in menuOptions"
-                    :key="menu.value"
-                    :value="menu.value"
-                    :disabled="menu.value === modal.editId"
-                  >
-                    {{ menu.label }}
-                  </a-select-option>
-                </a-select>
+  v-model:value="form.parent_id"
+  allow-clear
+  show-search
+  placeholder="Select parent"
+  option-filter-prop="label"
+  :options="parentMenuSelectOptions"
+/>
               </a-form-item>
             </a-col>
 
             <a-col :span="12">
               <a-form-item label="Module">
                 <a-select
-                  v-model:value="form.module_id"
-                  allow-clear
-                  show-search
-                  placeholder="Select module"
-                >
-                  <a-select-option
-                    v-for="module in moduleOptions"
-                    :key="module.value"
-                    :value="module.value"
-                  >
-                    {{ module.label }}
-                  </a-select-option>
-                </a-select>
+  v-model:value="form.module_id"
+  allow-clear
+  show-search
+  placeholder="Select module"
+  option-filter-prop="label"
+  :options="moduleSelectOptions"
+/>
               </a-form-item>
             </a-col>
 
@@ -159,19 +146,13 @@
             <a-col :span="24">
               <a-form-item label="Permission">
                 <a-select
-                  v-model:value="form.permission_name"
-                  allow-clear
-                  show-search
-                  placeholder="Select permission"
-                >
-                  <a-select-option
-                    v-for="permission in permissions"
-                    :key="permission.name"
-                    :value="permission.name"
-                  >
-                    {{ permission.name }}
-                  </a-select-option>
-                </a-select>
+  v-model:value="form.permission_name"
+  allow-clear
+  show-search
+  placeholder="Select permission"
+  option-filter-prop="label"
+  :options="permissionSelectOptions"
+/>
               </a-form-item>
             </a-col>
 
@@ -261,7 +242,27 @@ const columns = [
   { title: 'Status', key: 'is_active' },
   { title: 'Actions', key: 'actions', width: 280 },
 ]
+const parentMenuSelectOptions = computed(() => {
+  return menuOptions.value.map((menu: any) => ({
+    label: String(menu.label || menu.title || menu.name || ''),
+    value: menu.value ?? menu.id,
+    disabled: (menu.value ?? menu.id) === modal.editId,
+  }))
+})
 
+const moduleSelectOptions = computed(() => {
+  return moduleOptions.value.map((module: any) => ({
+    label: String(module.label || module.name || module.code || ''),
+    value: module.value ?? module.id,
+  }))
+})
+
+const permissionSelectOptions = computed(() => {
+  return permissions.value.map((permission: any) => ({
+    label: String(permission.name || permission.label || ''),
+    value: permission.name || permission.value,
+  }))
+})
 const fetchMenus = async () => {
   loading.value = true
 
@@ -303,7 +304,30 @@ const handleTableChange = (pager: any) => {
   pagination.pageSize = pager.pageSize
   fetchMenus()
 }
+const filterSelectOption = (input: string, option: any) => {
+  return String(option?.children || option?.label || '')
+    .toLowerCase()
+    .includes(input.toLowerCase())
+}
 
+const loadNextDisplayOrder = async () => {
+  if (modal.isEdit) {
+    return
+  }
+
+  try {
+    const response: any = await apiFetch('/menus/next-display-order', {
+      method: 'GET',
+      query: {
+        parent_id: form.parent_id || undefined,
+      },
+    })
+
+    form.display_order = response?.data?.display_order || 1
+  } catch {
+    form.display_order = 1
+  }
+}
 const resetForm = () => {
   form.tenant_id = null
   form.parent_id = null
@@ -325,9 +349,8 @@ const openCreateModal = async () => {
   modal.editId = null
   modal.visible = true
 
-  if (menuOptions.value.length === 0) {
-    await fetchOptions()
-  }
+  await fetchOptions()
+  await loadNextDisplayOrder()
 }
 
 const openEditModal = async (menu: any) => {
