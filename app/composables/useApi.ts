@@ -362,6 +362,191 @@ const getAttendanceDefaulters = (params: any = {}) => {
     params,
   })
 }
+const getFacultyAllocationContext = (params: any = {}) => {
+  return apiFetch('/faculty-allocation/context', {
+    method: 'GET',
+    params,
+  })
+}
+
+const getFacultyMembers = (params: any = {}) => {
+  return apiFetch('/faculty-allocation/faculty-members', {
+    method: 'GET',
+    params,
+  })
+}
+
+const createFacultyMember = (payload: any) => {
+  return apiFetch('/faculty-allocation/faculty-members', {
+    method: 'POST',
+    body: payload,
+  })
+}
+
+const getFacultyLoadPolicies = (params: any = {}) => {
+  return apiFetch('/faculty-allocation/load-policies', {
+    method: 'GET',
+    params,
+  })
+}
+
+const createFacultyLoadPolicy = (payload: any) => {
+  return apiFetch('/faculty-allocation/load-policies', {
+    method: 'POST',
+    body: payload,
+  })
+}
+
+const getCourseOfferings = (params: any = {}) => {
+  return apiFetch('/faculty-allocation/course-offerings', {
+    method: 'GET',
+    params,
+  })
+}
+
+const createCourseOffering = (payload: any) => {
+  return apiFetch('/faculty-allocation/course-offerings', {
+    method: 'POST',
+    body: payload,
+  })
+}
+
+const getTeacherAllocations = (params: any = {}) => {
+  return apiFetch('/faculty-allocation/allocations', {
+    method: 'GET',
+    params,
+  })
+}
+
+const validateTeacherAllocation = (payload: any) => {
+  return apiFetch('/faculty-allocation/allocations/validate', {
+    method: 'POST',
+    body: payload,
+  })
+}
+
+const createTeacherAllocation = (payload: any) => {
+  return apiFetch('/faculty-allocation/allocations', {
+    method: 'POST',
+    body: payload,
+  })
+}
+
+const getFacultyAllocationConflicts = (params: any = {}) => {
+  return apiFetch('/faculty-allocation/conflicts', {
+    method: 'GET',
+    params,
+  })
+}
+const getTeachingGroups = (params: any = {}) => {
+  return apiFetch('/faculty-allocation/teaching-groups', {
+    method: 'GET',
+    params,
+  })
+}
+
+const createTeachingGroup = (payload: any) => {
+  return apiFetch('/faculty-allocation/teaching-groups', {
+    method: 'POST',
+    body: payload,
+  })
+}
+
+const updateTeachingGroup = (groupId: number | string, payload: any) => {
+  return apiFetch(`/faculty-allocation/teaching-groups/${groupId}`, {
+    method: 'PUT',
+    body: payload,
+  })
+}
+
+const getTeachingGroupMembers = (groupId: number | string, params: any = {}) => {
+  return apiFetch(`/faculty-allocation/teaching-groups/${groupId}/members`, {
+    method: 'GET',
+    params,
+  })
+}
+
+const syncTeachingGroupMembers = (groupId: number | string, students: any[]) => {
+  return apiFetch(`/faculty-allocation/teaching-groups/${groupId}/members/sync`, {
+    method: 'POST',
+    body: { students },
+  })
+}
+
+const getEligibleStudentsForTeachingGroup = (params: any = {}) => {
+  return apiFetch('/faculty-allocation/eligible-students', {
+    method: 'GET',
+    params,
+  })
+}
+
+const createPracticalGroupsFromSection = (payload: any) => {
+  return apiFetch('/faculty-allocation/teaching-groups/create-practical-from-section', {
+    method: 'POST',
+    body: payload,
+  })
+}
+const createSplitCourseOfferings = (payload: any) => {
+  return apiFetch('/faculty-allocation/course-offerings/create-split', {
+    method: 'POST',
+    body: payload,
+  })
+}
+const getResourceManagementContext = (params: any = {}) => {
+  return apiFetch('/resource-management/context', {
+    method: 'GET',
+    params,
+  })
+}
+
+const getCampusBuildings = (params: any = {}) => {
+  return apiFetch('/resource-management/buildings', {
+    method: 'GET',
+    params,
+  })
+}
+
+const createCampusBuilding = (payload: any) => {
+  return apiFetch('/resource-management/buildings', {
+    method: 'POST',
+    body: payload,
+  })
+}
+
+const getCampusFloors = (params: any = {}) => {
+  return apiFetch('/resource-management/floors', {
+    method: 'GET',
+    params,
+  })
+}
+
+const createCampusFloor = (payload: any) => {
+  return apiFetch('/resource-management/floors', {
+    method: 'POST',
+    body: payload,
+  })
+}
+
+const getRooms = (params: any = {}) => {
+  return apiFetch('/resource-management/rooms', {
+    method: 'GET',
+    params,
+  })
+}
+
+const createRoom = (payload: any) => {
+  return apiFetch('/resource-management/rooms', {
+    method: 'POST',
+    body: payload,
+  })
+}
+
+const getAvailableRooms = (params: any = {}) => {
+  return apiFetch('/resource-management/rooms/available', {
+    method: 'GET',
+    params,
+  })
+}
   return {
     apiFetch,
     getToken,
@@ -415,5 +600,32 @@ const getAttendanceDefaulters = (params: any = {}) => {
     getAttendanceReportSummary,
     getAttendanceStudentCoursePercentages,
     getAttendanceDefaulters,
+    getFacultyAllocationContext,
+    getFacultyMembers,
+    createFacultyMember,
+    getFacultyLoadPolicies,
+    createFacultyLoadPolicy,
+    getCourseOfferings,
+    createCourseOffering,
+    getTeacherAllocations,
+    validateTeacherAllocation,
+    createTeacherAllocation,
+    getFacultyAllocationConflicts,
+    getTeachingGroups,
+    createTeachingGroup,
+    updateTeachingGroup,
+    getTeachingGroupMembers,
+    syncTeachingGroupMembers,
+    getEligibleStudentsForTeachingGroup,
+    createPracticalGroupsFromSection,
+    createSplitCourseOfferings,
+    getResourceManagementContext,
+    getCampusBuildings,
+    createCampusBuilding,
+    getCampusFloors,
+    createCampusFloor,
+    getRooms,
+    createRoom,
+    getAvailableRooms,
   }
 }
